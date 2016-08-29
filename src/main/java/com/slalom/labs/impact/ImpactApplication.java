@@ -1,9 +1,8 @@
 package com.slalom.labs.impact;
 
-import com.slalom.labs.impact.domain.Organization;
-import com.slalom.labs.impact.domain.Team;
-import com.slalom.labs.impact.service.OrganizationRepository;
-import com.slalom.labs.impact.service.TeamRepository;
+import com.slalom.labs.impact.domain.*;
+import com.slalom.labs.impact.service.*;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -13,6 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -30,7 +31,9 @@ public class ImpactApplication {
     }
 
     @Bean
-    public CommandLineRunner demo(OrganizationRepository orgRepository, TeamRepository teamRepository) {
+    public CommandLineRunner demo(OrganizationRepository orgRepository, TeamRepository teamRepository,
+                                  ServiceRepository serviceRepository, ContractRepository contractRepository,
+                                  WebhookRepository webhookRepository) {
         return (args) -> {
             // Save some organizations
             orgRepository.save(new Organization("slalom", "Slalom Consulting", null));
@@ -46,9 +49,9 @@ public class ImpactApplication {
             log.info("");
 
             // fetch an organization by name
-            log.info("Organization found with name('coke'):");
+            log.info("Organization found with name('acme'):");
             log.info("-----------------------------------");
-            orgRepository.findByName("coke")
+            orgRepository.findByName("acme")
                     .forEach(organization -> log.info(organization.getPresentedName()));
             log.info("");
 
@@ -81,6 +84,20 @@ public class ImpactApplication {
                     .collect(Collectors.toList())
                     .forEach(team -> log.info(team.getName()));
             log.info("");
+
+            // Save some services
+            serviceRepository.save(new Service("service1","Example Service 1", "An example service",
+                    teamRepository.findByName("atl-custom-dev").get(0), null, null, null));
+            serviceRepository.save(new Service("service2","Example Service 2", "Another example service",
+                    teamRepository.findByName("atl-custom-dev").get(0), null, null, null));
+
+            // Save a contract
+            Team team = teamRepository.findByName("atl-custom-dev").get(0);
+            List<Service> services = team.getServices();
+            Contract contract = contractRepository.save(new Contract(services.get(0), services.get(1), null, 300));
+
+            // Save a webhook
+            webhookRepository.save(new Webhook(contract, "localhost:8080/testing/mock", "my-secret", false));
         };
     }
 }

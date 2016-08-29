@@ -17,30 +17,36 @@ public class Service {
     private String id;
     private String name;
     private String presentedName;
+    private String description;
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
-    @OneToMany(mappedBy = "service", orphanRemoval = true, cascade = {CascadeType.ALL})
-    private List<Endpoint> endpoints;
+    @OneToMany(mappedBy = "producer", cascade = {CascadeType.ALL})
+    private List<Contract> producerContracts;
+    @OneToMany(mappedBy = "consumer", cascade = {CascadeType.ALL})
+    private List<Contract> consumerContracts;
     @OneToMany(mappedBy = "service", cascade = {CascadeType.ALL})
-    private List<Contract> contracts;
+    private List<Run> runs;
 
     protected Service() {}
 
-    public Service(String name, String presentedName, Team team, List<Endpoint> endpoints, List<Contract> contracts) {
+    public Service(String name, String presentedName, String description, Team team, List<Run> runs,
+                   List<Contract> producerContracts, List<Contract> consumerContracts) {
         this.name = name;
         this.presentedName = presentedName;
         this.team = team;
-        this.endpoints = endpoints;
-        this.contracts = contracts;
+        this.runs = runs;
+        this.producerContracts = producerContracts;
+        this.consumerContracts = consumerContracts;
+        this.description = description;
     }
 
-    public List<Endpoint> getEndpoints() {
-        return endpoints;
+    public List<Run> getEndpoints() {
+        return runs;
     }
 
-    public void setEndpoints(List<Endpoint> endpoints) {
-        this.endpoints = endpoints;
+    public void setEndpoints(List<Run> runs) {
+        this.runs = runs;
     }
 
     public String getId() {
@@ -67,6 +73,14 @@ public class Service {
         this.presentedName = presentedName;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Team getTeam() {
         return team;
     }
@@ -75,11 +89,27 @@ public class Service {
         this.team = team;
     }
 
-    public List<Contract> getContracts() {
-        return contracts;
+    public List<Contract> getProducerContracts() {
+        return producerContracts;
     }
 
-    public void setContracts(List<Contract> contracts) {
-        this.contracts = contracts;
+    public void setProducerContracts(List<Contract> producerContracts) {
+        this.producerContracts = producerContracts;
+    }
+
+    public List<Contract> getConsumerContracts() {
+        return consumerContracts;
+    }
+
+    public void setConsumerContracts(List<Contract> consumerContracts) {
+        this.consumerContracts = consumerContracts;
+    }
+
+    public List<Run> getRuns() {
+        return runs;
+    }
+
+    public void setRuns(List<Run> runs) {
+        this.runs = runs;
     }
 }

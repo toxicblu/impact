@@ -20,7 +20,7 @@ public class Team {
     private Organization organization;
     private String name;
     private String presentedName;
-    @OneToMany(mappedBy = "team", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Service> services;
 
     protected Team() {}

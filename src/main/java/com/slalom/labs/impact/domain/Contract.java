@@ -17,43 +17,55 @@ public class Contract {
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
     @ManyToOne
-    @JoinColumn(name = "service_id")
-    private Service service;
+    @JoinColumn(name = "producer_id")
+    private Service producer;
     @ManyToOne
-    @JoinColumn(name = "endpoint_id")
-    private Endpoint endpoint;
-    @Basic(optional = false)
-    @Column(insertable = false, updatable = false)
+    @JoinColumn(name = "consumer_id")
+    private Service consumer;
+//    @Basic(optional = false)
+//    @Column(insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
-    @Basic(optional = false)
-    @Column(insertable = false, updatable = false)
+//    @Basic(optional = false)
+//    @Column(insertable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateLastEdited;
     @OneToMany(mappedBy = "contract", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<ContractRevision> revisions;
-    @OneToMany(mappedBy = "contract", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Webhook> webhooks;
+    private int timeLimitSeconds;
+
+    @PrePersist
+    protected void onCreate() {
+        dateCreated = dateLastEdited = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        dateLastEdited = new Date();
+    }
 
     protected Contract() {}
 
-    public Contract(Service service, Endpoint endpoint, Date dateCreated,
-                    Date dateLastEdited, List<ContractRevision> revisions,
-                    List<Webhook> webhooks) {
-        this.service = service;
-        this.dateCreated = dateCreated;
-        this.dateLastEdited = dateLastEdited;
-        this.endpoint = endpoint;
-        this.revisions = revisions;
+    public Contract(Service producer, Service consumer, List<Webhook> webhooks, int time_limit_seconds) {
+        this.producer = producer;
+        this.consumer = consumer;
         this.webhooks = webhooks;
     }
 
-    public Service getService() {
-        return service;
+    public Service getProducer() {
+        return producer;
     }
 
-    public void setService(Service service) {
-        this.service = service;
+    public void setProducer(Service producer) {
+        this.producer = producer;
+    }
+
+    public Service getConsumer() {
+        return consumer;
+    }
+
+    public void setConsumer(Service consumer) {
+        this.consumer = consumer;
     }
 
     public Date getDateCreated() {
@@ -72,14 +84,6 @@ public class Contract {
         this.dateLastEdited = dateLastEdited;
     }
 
-    public Endpoint getEndpoint() {
-        return endpoint;
-    }
-
-    public void setEndpoint(Endpoint endpoint) {
-        this.endpoint = endpoint;
-    }
-
     public String getId() {
         return id;
     }
@@ -88,19 +92,19 @@ public class Contract {
         this.id = id;
     }
 
-    public List<ContractRevision> getRevisions() {
-        return revisions;
-    }
-
-    public void setRevisions(List<ContractRevision> revisions) {
-        this.revisions = revisions;
-    }
-
     public List<Webhook> getWebhooks() {
         return webhooks;
     }
 
     public void setWebhooks(List<Webhook> webhooks) {
         this.webhooks = webhooks;
+    }
+
+    public int getTimeLimitSeconds() {
+        return timeLimitSeconds;
+    }
+
+    public void setTimeLimitSeconds(int timeLimitSeconds) {
+        this.timeLimitSeconds = timeLimitSeconds;
     }
 }

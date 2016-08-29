@@ -18,30 +18,25 @@ public class Test {
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
     @ManyToOne
-    @JoinColumn(name = "endpoint_id")
-    private Endpoint endpoint;
-    @Basic(optional = false)
-    @Column(insertable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateStarted;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateCompleted;
-    @Min(0)@Max(1)
-    private float percentPassed;
-    @Min(0)@Max(100)
-    private float deltaPassed;
-    String status;
+    @JoinColumn(name = "contract_id")
+    private Contract contract;
+    @ManyToOne
+    @JoinColumn(name = "webhook_id")
+    private Webhook webhook;
+    @ManyToOne
+    @JoinColumn(name = "run_id")
+    private Run run;
+    private String status;
+    private String summary;
 
     public Test() { }
 
-    public Test(Endpoint endpoint, Date dateStarted, Date dateCompleted,
-                float percentPassed, float deltaPassed, String status) {
-        this.endpoint = endpoint;
-        this.dateStarted = dateStarted;
-        this.dateCompleted = dateCompleted;
-        this.percentPassed = percentPassed;
-        this.deltaPassed = deltaPassed;
+    public Test(Contract contract, Webhook webhook, Run run, String status, String summary) {
+        this.contract = contract;
+        this.webhook = webhook;
+        this.run = run;
         this.status = status;
+        this.summary = summary;
     }
 
     public String getId() {
@@ -52,44 +47,28 @@ public class Test {
         this.id = id;
     }
 
-    public Endpoint getEndpoint() {
-        return endpoint;
+    public Contract getContract() {
+        return contract;
     }
 
-    public void setEndpoint(Endpoint endpoint) {
-        this.endpoint = endpoint;
+    public void setContract(Contract contract) {
+        this.contract = contract;
     }
 
-    public Date getDateStarted() {
-        return dateStarted;
+    public Webhook getWebhook() {
+        return webhook;
     }
 
-    public void setDateStarted(Date dateStarted) {
-        this.dateStarted = dateStarted;
+    public void setWebhook(Webhook webhook) {
+        this.webhook = webhook;
     }
 
-    public Date getDateCompleted() {
-        return dateCompleted;
+    public Run getRun() {
+        return run;
     }
 
-    public void setDateCompleted(Date dateCompleted) {
-        this.dateCompleted = dateCompleted;
-    }
-
-    public float getPercentPassed() {
-        return percentPassed;
-    }
-
-    public void setPercentPassed(float percentPassed) {
-        this.percentPassed = percentPassed;
-    }
-
-    public float getDeltaPassed() {
-        return deltaPassed;
-    }
-
-    public void setDeltaPassed(float deltaPassed) {
-        this.deltaPassed = deltaPassed;
+    public void setRun(Run run) {
+        this.run = run;
     }
 
     public String getStatus() {
@@ -98,5 +77,13 @@ public class Test {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }
