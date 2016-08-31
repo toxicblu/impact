@@ -1,21 +1,28 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Impact</title>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.0/es6-shim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.20/system-polyfills.js"></script>
-    <script src="https://npmcdn.com/angular2@2.0.0-beta.11/es6/dev/src/testing/shims_for_IE.js"></script>
-    <script src="https://code.angularjs.org/2.0.0-beta.11/angular2-polyfills.js"></script>
-
-    <script src="jspm_packages/system.js"></script>
-    <script src="config.js"></script>
+    <base href="/">
+    <title>Angular 2 QuickStart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <!-- Application CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- 1. Load libraries -->
+    <!-- Polyfill(s) for older browsers -->
+    <script src="node_modules/core-js/client/shim.min.js"></script>
+    <script src="node_modules/zone.js/dist/zone.js"></script>
+    <script src="node_modules/reflect-metadata/Reflect.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <!-- 2. Configure SystemJS -->
+    <script src="systemjs.config.js"></script>
     <script>
-        System.import('src/main')
-                .then(null, console.error.bind(console));
+        System.import('app').catch(function(err){ console.error(err); });
     </script>
 </head>
+<!-- 3. Display the application -->
 <body>
-    <impact-app>Loading...</impact-app>
+<si-app>Loading...</si-app>
 </body>
 </html>

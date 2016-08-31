@@ -1,0 +1,12 @@
+/* Master Styles */
+
+/* For navbar-fixed-top */
+/*body { padding-top: 54px; }
+@media screen and (max-width: 768px) {
+    body { padding-top: 0px; }
+}*/
+
+.no-gutter > [class*='col-'] {
+  padding-right:0;
+  padding-left:0;
+}
